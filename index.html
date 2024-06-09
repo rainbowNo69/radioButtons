@@ -154,9 +154,9 @@
             if(dateOption == 'yearRange'){
               const startYear = formData.get('startYear');
               const endYear = formData.get('endYear');
-              url.searchParams.set('dateOption', `${startYear},${endYear}`);
+              url.searchParams.set('u_dateOption', `${startYear},${endYear}`);
             }else{
-              url.searchParams.set('dateOption', dateOption);
+              url.searchParams.set('u_dateOption', dateOption);
             }
             history.pushState(null, '', url);
         });
