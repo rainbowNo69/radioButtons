@@ -83,13 +83,19 @@
     </style>
 </head>
 <body>
-    <form>
+    <form id="dateForm">
         <div class="btn-group">
-            <input type="radio" name="dateOption" id="year" value="year" onclick="toggleYearRange(false)">
-            <label for="year" class="btn">按年</label>
+            <input type="radio" name="dateOption" id="year" value="year" onclick="toggleYearRange(false)" checked>
+            <label for="year" class="btn">本年</label>
+
+            <input type="radio" name="dateOption" id="halfYear" value="halfYear" onclick="toggleYearRange(false)">
+            <label for="halfYear" class="btn">半年</label>
+
+            <input type="radio" name="dateOption" id="quarter" value="quarter" onclick="toggleYearRange(false)">
+            <label for="quarter" class="btn">本季度</label>
 
             <input type="radio" name="dateOption" id="month" value="month" onclick="toggleYearRange(false)">
-            <label for="month" class="btn">按月</label>
+            <label for="month" class="btn">本月</label>
 
             <input type="radio" name="dateOption" id="yearRange" value="yearRange" onclick="toggleYearRange(true)">
             <label for="yearRange" class="btn">年份范围</label>
@@ -97,22 +103,28 @@
 
         <div id="yearRangeSelectorContainer" class="year-range-selector-container hidden">
             <div class="year-range-selector">
-                <select id="startYear">
+                <select id="startYear" name="startYear">
                     <!-- 这里可以根据需要添加更多年份 -->
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
                     <option value="2020">2020</option>
                     <option value="2021">2021</option>
                     <option value="2022">2022</option>
-                    <option value="2023">2023</option>
+                    <option value="2023"selected>2023</option>
                     <option value="2024">2024</option>
                 </select>
                 至
-                <select id="endYear">
+                <select id="endYear" name="endYear">
                     <!-- 这里可以根据需要添加更多年份 -->
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
                     <option value="2020">2020</option>
                     <option value="2021">2021</option>
                     <option value="2022">2022</option>
                     <option value="2023">2023</option>
-                    <option value="2024">2024</option>
+                    <option value="2024" selected>2024</option>
                 </select>
             </div>
         </div>
@@ -131,6 +143,23 @@
                 yearRangeSelectorContainer.classList.add('hidden');
             }
         }
+
+        const form = document.getElementById('dateForm');
+         // 监听表单元素的变化
+         form.addEventListener('change', function() {
+            const formData = new FormData(form);
+            const dateOption = formData.get('dateOption');
+            // 更新URL
+            const url = new URL(window.location.href);
+            if(dateOption == 'yearRange'){
+              const startYear = formData.get('startYear');
+              const endYear = formData.get('endYear');
+              url.searchParams.set('dateOption', `${startYear},${endYear}`);
+            }else{
+              url.searchParams.set('dateOption', dateOption);
+            }
+            history.pushState(null, '', url);
+        });
     </script>
 </body>
 </html>
