@@ -1,91 +1,136 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tab栏</title>
-<style>
-    /* 样式 */
-    .tab {
-        overflow: hidden;
-        background-color: #f2f2f2;
-        border-radius: 5px;
-    }
-
-    /* 按钮 */
-    .tab button {
-        background-color: #3498db;
-        color: white;
-        float: left;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        padding: 10px 20px;
-        transition: 0.3s;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        margin-right: 10px; /* 添加右边距 */
-    }
-
-    /* 按钮激活状态 */
-    .tab button.active {
-        background-color: #1abc9c;
-    }
-
-    /* 内容区域 */
-    .tabcontent {
-        display: none;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-top: none;
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-        margin-left: 10px; /* 添加左边距 */
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单选按钮和年份范围选择器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        form {
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .hidden {
+            display: none;
+        }
+        .year-range-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+        }
+        .btn {
+            white-space: nowrap; /* 防止换行 */
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 2px;
+            flex: 1;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .btn.active, .btn-group input[type="radio"]:checked + .btn {
+            background-color: #0056b3;
+        }
+        .btn-group input[type="radio"] {
+            display: none;
+        }
+        .year-range-selector-container {
+            position: absolute;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            z-index: 1;
+        }
+        select {
+            padding: 5px;
+            font-size: 16px;
+            margin: 0 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        select:focus {
+            border-color: #007bff;
+        }
+    </style>
 </head>
 <body>
+    <form>
+        <div class="btn-group">
+            <input type="radio" name="dateOption" id="year" value="year" onclick="toggleYearRange(false)">
+            <label for="year" class="btn">按年</label>
 
-<div class="tab">
-    <button class="tablinks" onclick="openTab(event, 'Tab1')" id="defaultOpen">Tab 1</button>
-    <button class="tablinks" onclick="openTab(event, 'Tab2')">Tab 2</button>
-    <button class="tablinks" onclick="openTab(event, 'Tab3')">Tab 3</button>
-</div>
+            <input type="radio" name="dateOption" id="month" value="month" onclick="toggleYearRange(false)">
+            <label for="month" class="btn">按月</label>
 
-<div id="Tab1" class="tabcontent">
-    <h3>Tab 1 Content</h3>
-    <p>This is the content of Tab 1.</p>
-</div>
+            <input type="radio" name="dateOption" id="yearRange" value="yearRange" onclick="toggleYearRange(true)">
+            <label for="yearRange" class="btn">年份范围</label>
+        </div>
 
-<div id="Tab2" class="tabcontent">
-    <h3>Tab 2 Content</h3>
-    <p>This is the content of Tab 2.</p>
-</div>
+        <div id="yearRangeSelectorContainer" class="year-range-selector-container hidden">
+            <div class="year-range-selector">
+                <select id="startYear">
+                    <!-- 这里可以根据需要添加更多年份 -->
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                </select>
+                至
+                <select id="endYear">
+                    <!-- 这里可以根据需要添加更多年份 -->
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                </select>
+            </div>
+        </div>
+    </form>
 
-<div id="Tab3" class="tabcontent">
-    <h3>Tab 3 Content</h3>
-    <p>This is the content of Tab 3.</p>
-</div>
-
-<script>
-    // 打开默认Tab
-    document.getElementById("defaultOpen").click();
-
-    // 打开对应Tab
-    function openTab(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+    <script>
+        function toggleYearRange(show) {
+            const yearRangeSelectorContainer = document.getElementById('yearRangeSelectorContainer');
+            const yearRangeButton = document.getElementById('yearRange').nextElementSibling;
+            if (show) {
+                const rect = yearRangeButton.getBoundingClientRect();
+                yearRangeSelectorContainer.style.top = `${rect.bottom + window.scrollY}px`;
+                yearRangeSelectorContainer.style.left = `${rect.left + window.scrollX}px`;
+                yearRangeSelectorContainer.classList.remove('hidden');
+            } else {
+                yearRangeSelectorContainer.classList.add('hidden');
+            }
         }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
-</script>
-
+    </script>
 </body>
 </html>
