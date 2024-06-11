@@ -153,6 +153,7 @@
 
         const form = document.getElementById('dateForm');
          // 监听表单元素的变化
+	const banber = new window.parent.Banber()
          form.addEventListener('change', function() {
             const formData = new FormData(form);
             const dateOption = formData.get('dateOption');
@@ -164,8 +165,10 @@
                 const startDate = getFirstDayOfYear(Number(startYear));
                 const endDate = getLastDayOfYear(Number(endYear));
                 url.searchParams.set('u_dateOption', `${startDate.valueOf()},${endDate.valueOf()}`);
+		banber.setQuery({u_dateOption: `${startDate.valueOf()},${endDate.valueOf()}`})
             }else{
               url.searchParams.set('u_dateOption', dateOption);
+		banber.setQuery({u_dateOption: dateOption})
             }
             history.pushState(null, '', url);
         });
