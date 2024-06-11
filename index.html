@@ -130,6 +130,14 @@
     </form>
 
     <script>
+        function getFirstDayOfYear(year) {
+            return new Date(year, 0, 1);
+        }
+        function getLastDayOfYear(year) {
+            return new Date(year, 11, 31);
+        }
+    </script>
+    <script>
         function toggleYearRange(show) {
             const yearRangeSelectorContainer = document.getElementById('yearRangeSelectorContainer');
             const yearRangeButton = document.getElementById('yearRange').nextElementSibling;
@@ -153,7 +161,9 @@
             if(dateOption == 'yearRange'){
               const startYear = formData.get('startYear');
               const endYear = formData.get('endYear');
-              url.searchParams.set('u_dateOption', `${startYear},${endYear}`);
+                const startDate = getFirstDayOfYear(Number(startYear));
+                const endDate = getLastDayOfYear(Number(endYear));
+                url.searchParams.set('u_dateOption', `${startDate.valueOf()},${endDate.valueOf()}`);
             }else{
               url.searchParams.set('u_dateOption', dateOption);
             }
